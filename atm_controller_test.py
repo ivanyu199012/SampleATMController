@@ -32,21 +32,22 @@ class TestATMController(unittest.TestCase):
 	def test_authenticate( self ):
 		""" expect to success """
 		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
-		is_authenticated, access_token = self.atm_controller.authenticate( "1234" )
+		is_authenticated, _, access_token = self.atm_controller.authenticate( "1234" )
 		self.assertEqual( is_authenticated, True, 'pin is incorrect or no this card information' )
 		self.assertEqual( access_token != "", True, 'no access token return' )
 
 	def test_authenticate_wrong_pin( self ):
 		""" expect to failed because of wrong pin """
 		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
-		is_authenticated, access_token = self.atm_controller.authenticate( "1245" )
+		is_authenticated, err_msg, access_token = self.atm_controller.authenticate( "1245" )
 		self.assertEqual( is_authenticated, False, 'pin should not be correct' )
+		self.assertEqual( err_msg, "card_number or pin incorrect", 'err_msg is incorrect' )
 		self.assertEqual( access_token is None, True, 'access token should not exist' )
 
 	def test_get_account_list( self ):
 		""" expect to success to get account list """
 		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
-		_, access_token = self.atm_controller.authenticate( "1234" )
+		is_authenticated, _, access_token = self.atm_controller.authenticate( "1234" )
 		is_success, account_list = self.atm_controller.get_account_list( access_token )
 		self.assertEqual( is_success, True, 'get_account_list method failed' )
 		self.assertEqual( len( account_list ), 3, 'account list length is not correct' )
@@ -54,7 +55,7 @@ class TestATMController(unittest.TestCase):
 	def test_get_account_balance( self ):
 		""" expect to success to get account balance """
 		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
-		_, access_token = self.atm_controller.authenticate( "1234" )
+		is_authenticated, _, access_token = self.atm_controller.authenticate( "1234" )
 		is_success, account_balance = self.atm_controller.get_balance( access_token, "73282088" )
 		self.assertEqual( is_success, True, 'get_account_balance method failed' )
 		self.assertEqual( account_balance, 10001, 'account balance is not correct' )
@@ -62,7 +63,7 @@ class TestATMController(unittest.TestCase):
 	def test_get_account_balance( self ):
 		""" expect to success to get account balance """
 		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
-		_, access_token = self.atm_controller.authenticate( "1234" )
+		is_authenticated, _, access_token = self.atm_controller.authenticate( "1234" )
 		is_success, account_balance = self.atm_controller.get_balance( access_token, "73282088" )
 		self.assertEqual( is_success, True, 'get_account_balance method failed' )
 		self.assertEqual( account_balance, 10001, 'account balance is not correct' )
@@ -70,7 +71,7 @@ class TestATMController(unittest.TestCase):
 	def test_withdraw( self ):
 		""" expect to withdraw success """
 		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
-		_, access_token = self.atm_controller.authenticate( "1234" )
+		is_authenticated, _, access_token = self.atm_controller.authenticate( "1234" )
 		is_success, account_balance = self.atm_controller.get_balance( access_token, "73282088" )
 
 		self.assertEqual( is_success, True, 'get_account_balance method failed' )
@@ -83,7 +84,7 @@ class TestATMController(unittest.TestCase):
 	def test_deposit( self ):
 		""" expect to deposit success """
 		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
-		_, access_token = self.atm_controller.authenticate( "1234" )
+		is_authenticated, _, access_token = self.atm_controller.authenticate( "1234" )
 		is_success, account_balance = self.atm_controller.get_balance( access_token, "73282088" )
 
 		self.assertEqual( is_success, True, 'get_account_balance method failed' )

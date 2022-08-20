@@ -1,6 +1,7 @@
 #
 import json
 from bank_api import BankAPI
+from custom_crypto import CustomCrypto
 from logger import CustomLogger
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -38,9 +39,11 @@ class ATMController:
 
 		Returns:
 			boolean: is_success
-			str: access_token
+			str: access_token, None if the method failed
 		"""
-		return BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
+		is_success, err_msg, card_number = BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
+		access_token = CustomCrypto.encrpyt( card_number ) if is_success else None
+		return is_success, err_msg, access_token
 
 	def __is_valid_card_info( self, _card_info_dict ):
 

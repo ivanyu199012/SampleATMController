@@ -48,7 +48,7 @@ class TestATMController(unittest.TestCase):
 		""" expect to success to get account list """
 		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
 		is_authenticated, _, access_token = self.atm_controller.authenticate( "1234" )
-		is_success, account_list = self.atm_controller.get_account_list( access_token )
+		is_success, _, account_list = self.atm_controller.get_account_list( access_token )
 		self.assertEqual( is_success, True, 'get_account_list method failed' )
 		self.assertEqual( len( account_list ), 3, 'account list length is not correct' )
 

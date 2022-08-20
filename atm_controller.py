@@ -45,14 +45,40 @@ class ATMController:
 		try:
 			is_success, err_msg, card_number = BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
 			access_token = CustomCrypto.encrpyt( card_number ) if is_success else None
+			return is_success, err_msg, access_token
 		except Exception as e:
 			is_success = False
 			logger.error( e )
 			return is_success, str(e), None
-		return is_success, err_msg, access_token
+
+	def get_account_list( self, access_token ):
+		"""get account list by access token
+
+		Args:
+			access_token (str): access_token
+
+		Returns:
+			boolean: is_success
+			str: error message
+			list: account_list, None if the method failed
+		"""
+		try:
+			card_number = CustomCrypto.decrypt( access_token )
+			return BankAPI.get_account_list( card_number )
+		except Exception as e:
+			logger.error( e )
+			return False, str(e), None
+
+	def get_balance(self, access_token, account_num):
+		return BankAPI.get_account_balance( access_token, account_num )
+
+	def withdraw(self, access_token, account_num, amount):
+		return BankAPI.withdraw( access_token, account_num, amount)
+
+	def deposit(self, access_token, account_num, amount):
+		return BankAPI.deposit( access_token, account_num, amount)
 
 	def __is_valid_card_info( self, _card_info_dict ):
-
 		if 'card_number' not in _card_info_dict:
 			logger.warning( f'Read Card Failed. card_number not found' )
 			return False
@@ -68,19 +94,4 @@ class ATMController:
 			return False
 
 		return True
-
-
-	def get_account_list( self, access_token ):
-		card_number = CustomCrypto.decrypt( access_token )
-		return BankAPI.get_account_list( access_token )
-
-
-	def get_balance(self, access_token, account_num):
-		return BankAPI.get_account_balance( access_token, account_num )
-
-	def withdraw(self, access_token, account_num, amount):
-		return BankAPI.withdraw( access_token, account_num, amount)
-
-	def deposit(self, access_token, account_num, amount):
-		return BankAPI.deposit( access_token, account_num, amount)
 

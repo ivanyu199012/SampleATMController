@@ -1,0 +1,19 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Git Fetch & Pull",
+			"type": "shell",
+			"command": "git fetch & git pull",
+			"runOptions": { "runOn": "folderOpen" }
+		},
+		{
+			"label": "Test ATM Controller",
+			"type": "shell",
+			"group": "test",
+			"command": "bearEnv\\Scripts\\activate && python atm_controller_test.py"
+		}
+	]
+  }

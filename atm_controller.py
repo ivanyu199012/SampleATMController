@@ -1,5 +1,6 @@
 #
 import json
+from bank_api import BankAPI
 from logger import CustomLogger
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -14,6 +15,15 @@ class ATMController:
 	# read_card_info_by is the method to decrpyt the card information
 	# and store it in the cache so it can be used later for other operations
 	def is_read_card_success(self, encryted_card_info):
+		""" Check whether the card info is valid or not
+			and store the card info in cache if valid
+
+		Args:
+			encryted_card_info (_type_): _description_
+
+		Returns:
+			_type_: _description_
+		"""
 		try:
 			_card_info_dict = json.loads( encryted_card_info )
 			if self.__is_valid_card_info( _card_info_dict ):
@@ -23,6 +33,10 @@ class ATMController:
 		except Exception as e:
 			logger.error( e )
 			return False
+
+	def authenticate(self, pin):
+		is_success, access_token = BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
+		return is_success, access_token
 
 	def __is_valid_card_info( self, _card_info_dict ):
 
@@ -41,6 +55,8 @@ class ATMController:
 			return False
 
 		return True
+
+
 
 	def withdraw(self, amount):
 		self.atm.withdraw(amount)

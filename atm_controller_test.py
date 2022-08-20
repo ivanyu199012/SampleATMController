@@ -67,7 +67,7 @@ class TestATMController(unittest.TestCase):
 		self.assertEqual( is_success, True, 'get_account_balance method failed' )
 		self.assertEqual( account_balance, 10001, 'account balance is not correct' )
 
-	def test_get_withdraw( self ):
+	def test_withdraw( self ):
 		""" expect to withdraw success """
 		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
 		_, access_token = self.atm_controller.authenticate( "1234" )
@@ -79,6 +79,19 @@ class TestATMController(unittest.TestCase):
 		is_success, new_account_balance = self.atm_controller.withdraw( access_token, "73282088", 10 )
 		self.assertEqual( is_success, True, 'withdraw method failed' )
 		self.assertEqual( new_account_balance, account_balance - 10, 'account balance is not correct' )
+
+	def test_deposit( self ):
+		""" expect to deposit success """
+		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
+		_, access_token = self.atm_controller.authenticate( "1234" )
+		is_success, account_balance = self.atm_controller.get_balance( access_token, "73282088" )
+
+		self.assertEqual( is_success, True, 'get_account_balance method failed' )
+		print( f'{ account_balance= }' )
+
+		is_success, new_account_balance = self.atm_controller.deposit( access_token, "73282088", 10 )
+		self.assertEqual( is_success, True, 'deposit method failed' )
+		self.assertEqual( new_account_balance, account_balance + 10, 'account balance is not correct' )
 
 
 if __name__ == '__main__':

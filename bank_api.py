@@ -85,3 +85,33 @@ class BankAPI:
 			is_success = False
 			logger.error( e )
 			return is_success, None
+
+
+	@classmethod
+	def deposit( self, access_token, account_num, amout ):
+		is_success = True
+		new_balance = -1
+		try:
+			card_number = CustomCrypto.decrypt( access_token )
+			with open('db/db.json', 'r+') as db_json_file:
+				db_dict = json.load( db_json_file )
+				if card_number in db_dict:
+					account_list = db_dict[ card_number ][ 'accounts' ]
+					account_index = -1
+					for i in range( len( account_list ) ):
+						if account_list[ i ][ 'account_num' ] == account_num:
+							account_index = i
+							break
+
+					new_balance = db_dict[ card_number ][ 'accounts' ][ account_index ][ 'balance' ] + amout
+					db_dict[ card_number ][ 'accounts' ][ account_index ][ 'balance' ] = new_balance
+
+					db_json_file.seek( 0 )
+					json.dump( db_dict, db_json_file, indent=4, sort_keys=True )
+					db_json_file.truncate()
+
+			return is_success, new_balance
+		except Exception as e:
+			is_success = False
+			logger.error( e )
+			return is_success, None

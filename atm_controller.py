@@ -70,32 +70,6 @@ class ATMController:
 	def withdraw(self, access_token, account_num, amount):
 		return BankAPI.withdraw( access_token, account_num, amount)
 
-	def deposit(self, amount):
-		self.atm.deposit(amount)
+	def deposit(self, access_token, account_num, amount):
+		return BankAPI.deposit( access_token, account_num, amount)
 
-
-
-	def show_menu(self):
-		print("""
-		1. Withdraw
-		2. Deposit
-		3. Balance
-		4. Exit
-		""")
-
-	def run(self):
-		while True:
-			self.show_menu()
-			choice = int(input("Enter your choice: "))
-			if choice == 1:
-				amount = int(input("Enter amount to withdraw: "))
-				self.withdraw(amount)
-			elif choice == 2:
-				amount = int(input("Enter amount to deposit: "))
-				self.deposit(amount)
-			elif choice == 3:
-				print("Your balance is: {}".format(self.balance()))
-			elif choice == 4:
-				break
-			else:
-				print("Invalid choice")

@@ -10,19 +10,15 @@ class ATMController:
 
 	card_info_dict = None
 
-	# When reading the card information, the primary source should be encrpyted
-	# For simplicity, here we just use the json string for encryted_card_info
-	# read_card_info_by is the method to decrpyt the card information
-	# and store it in the cache so it can be used later for other operations
 	def is_read_card_success(self, encryted_card_info):
 		""" Check whether the card info is valid or not
 			and store the card info in cache if valid
 
 		Args:
-			encryted_card_info (_type_): _description_
+			encryted_card_info (str): encryted_card_info
 
 		Returns:
-			_type_: _description_
+			boolean: is_success
 		"""
 		try:
 			_card_info_dict = json.loads( encryted_card_info )
@@ -35,6 +31,15 @@ class ATMController:
 			return False
 
 	def authenticate(self, pin):
+		"""authenticate the card and return the access_token if authenticated
+
+		Args:
+			pin (str): pin
+
+		Returns:
+			boolean: is_success
+			str: access_token
+		"""
 		is_success, access_token = BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
 		return is_success, access_token
 

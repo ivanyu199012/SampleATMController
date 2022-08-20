@@ -40,8 +40,7 @@ class ATMController:
 			boolean: is_success
 			str: access_token
 		"""
-		is_success, access_token = BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
-		return is_success, access_token
+		return BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
 
 	def __is_valid_card_info( self, _card_info_dict ):
 
@@ -61,6 +60,9 @@ class ATMController:
 
 		return True
 
+
+	def get_account_list( self, access_token ):
+		return BankAPI.get_account_list( access_token )
 
 
 	def withdraw(self, amount):

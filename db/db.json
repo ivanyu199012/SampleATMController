@@ -13,6 +13,11 @@
 				"name": "checking",
 				"account_num" : "73282088",
 				"balance" : 10001
+			},
+			{
+				"name": "investment",
+				"account_num" : "73282087",
+				"balance" : 10360
 			}
 		]
 	},

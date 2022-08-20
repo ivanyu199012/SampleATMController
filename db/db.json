@@ -1,58 +1,58 @@
 {
-	"4024007180059403" : {
-		"id": 1,
-		"owner": "John Kim",
-		"pin": "1234",
-		"accounts" : [
-			{
-				"name": "saving",
-				"account_num" : "73282087",
-				"balance" : 10000
-			},
-			{
-				"name": "checking",
-				"account_num" : "73282088",
-				"balance" : 10001
-			},
-			{
-				"name": "investment",
-				"account_num" : "73282087",
-				"balance" : 10360
-			}
-		]
-	},
-	"4024007103423348" : {
-		"id": 1,
-		"owner": "Erick Jung",
-		"PIN": "1234",
-		"accounts" : [
-			{
-				"name": "saving",
-				"account_num" : "73282081",
-				"balance" : 1000
-			},
-			{
-				"name": "checking",
-				"account_num" : "73282082",
-				"balance" : 1001
-			}
-		]
-	},
-	"4556849142449412" : {
-		"id": 1,
-		"owner": "Bruce Lee",
-		"PIN": "1234",
-		"accounts" : [
-			{
-				"name": "saving",
-				"account_num" : "73282081",
-				"balance" : 2000
-			},
-			{
-				"name": "checking",
-				"account_num" : "73282082",
-				"balance" : 2001
-			}
-		]
-	}
+    "4024007103423348": {
+        "PIN": "1234",
+        "accounts": [
+            {
+                "account_num": "73282081",
+                "balance": 1000,
+                "name": "saving"
+            },
+            {
+                "account_num": "73282082",
+                "balance": 1001,
+                "name": "checking"
+            }
+        ],
+        "id": 1,
+        "owner": "Erick Jung"
+    },
+    "4024007180059403": {
+        "accounts": [
+            {
+                "account_num": "73282087",
+                "balance": 10000,
+                "name": "saving"
+            },
+            {
+                "account_num": "73282088",
+                "balance": 9991,
+                "name": "checking"
+            },
+            {
+                "account_num": "73282087",
+                "balance": 10290,
+                "name": "investment"
+            }
+        ],
+        "id": 1,
+        "owner": "John Kim",
+        "pin": "1234"
+    },
+    "4556849142449412": {
+        "PIN": "1234",
+        "accounts": [
+            {
+                "account_num": "73282081",
+                "balance": 2000,
+                "name": "saving"
+            },
+            {
+                "account_num": "73282082",
+                "balance": 2001,
+                "name": "checking"
+            }
+        ],
+        "id": 1,
+        "owner": "Bruce Lee"
+    }
 }

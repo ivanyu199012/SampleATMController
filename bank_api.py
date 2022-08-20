@@ -8,18 +8,12 @@ class BankAPI:
 
 	@classmethod
 	def authenticate( self, card_number, pin ):
-		try:
-			with open('db/db.json', 'r') as db_json_file:
-				db_dict = json.load( db_json_file )
-				if not card_number in db_dict or pin != db_dict[ card_number ][ 'pin' ] :
-					return False, "card_number or pin incorrect", None
-				if pin == db_dict[ card_number ][ 'pin' ]:
-					return True, None, card_number
-		except Exception as e:
-			is_success = False
-			logger.error( e )
-			return is_success, str(e), None
-
+		with open('db/db.json', 'r') as db_json_file:
+			db_dict = json.load( db_json_file )
+			if not card_number in db_dict or pin != db_dict[ card_number ][ 'pin' ] :
+				return False, "card_number or pin incorrect", None
+			if pin == db_dict[ card_number ][ 'pin' ]:
+				return True, None, card_number
 
 	@classmethod
 	def get_account_list( self, access_token ):

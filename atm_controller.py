@@ -39,10 +39,16 @@ class ATMController:
 
 		Returns:
 			boolean: is_success
+			str: error message
 			str: access_token, None if the method failed
 		"""
-		is_success, err_msg, card_number = BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
-		access_token = CustomCrypto.encrpyt( card_number ) if is_success else None
+		try:
+			is_success, err_msg, card_number = BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
+			access_token = CustomCrypto.encrpyt( card_number ) if is_success else None
+		except Exception as e:
+			is_success = False
+			logger.error( e )
+			return is_success, str(e), None
 		return is_success, err_msg, access_token
 
 	def __is_valid_card_info( self, _card_info_dict ):
@@ -65,7 +71,9 @@ class ATMController:
 
 
 	def get_account_list( self, access_token ):
+		card_number = CustomCrypto.decrypt( access_token )
 		return BankAPI.get_account_list( access_token )
+
 
 	def get_balance(self, access_token, account_num):
 		return BankAPI.get_account_balance( access_token, account_num )

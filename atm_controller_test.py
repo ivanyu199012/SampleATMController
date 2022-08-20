@@ -51,5 +51,15 @@ class TestATMController(unittest.TestCase):
 		self.assertEqual( is_success, True, 'get_account_list method failed' )
 		self.assertEqual( len( account_list ), 3, 'account list length is not correct' )
 
+	def test_get_account_balance( self ):
+		""" expect to success to get account balance """
+		self.atm_controller.is_read_card_success('{ "card_number": "4024007180059403", "expiry_date": "12/22" }')
+		_, access_token = self.atm_controller.authenticate( "1234" )
+		is_success, account_balance = self.atm_controller.get_balance( access_token, "73282088" )
+		self.assertEqual( is_success, True, 'get_account_balance method failed' )
+		self.assertEqual( account_balance, 10001, 'account balance is not correct' )
+
+
+
 if __name__ == '__main__':
 	unittest.main()

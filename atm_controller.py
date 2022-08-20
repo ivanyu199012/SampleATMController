@@ -64,6 +64,8 @@ class ATMController:
 	def get_account_list( self, access_token ):
 		return BankAPI.get_account_list( access_token )
 
+	def get_balance(self, access_token, account_num):
+		return BankAPI.get_account_balance( access_token, account_num )
 
 	def withdraw(self, amount):
 		self.atm.withdraw(amount)
@@ -71,8 +73,7 @@ class ATMController:
 	def deposit(self, amount):
 		self.atm.deposit(amount)
 
-	def balance(self):
-		return self.atm.balance()
+
 
 	def show_menu(self):
 		print("""

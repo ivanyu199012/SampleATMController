@@ -1,0 +1,10 @@
+Requirement:
+
+Basic
+- Basic Flow: Insert Card => PIN number => Select Account => See Balance/Deposit/Withdraw
+- Need test in the code to test the function (unit test)
+- 1 dollars bill only
+
+Scalability matter
+- may integrate it with a real bank system in the future
+- may integrate with real cash bin in the ATM in the future

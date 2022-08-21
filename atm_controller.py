@@ -69,7 +69,13 @@ class ATMController:
 			return False, str(e), None
 
 	def get_balance(self, access_token, account_num):
-		return BankAPI.get_account_balance( access_token, account_num )
+		try:
+			card_number = CustomCrypto.decrypt( access_token )
+			return BankAPI.get_account_balance( card_number, account_num )
+		except Exception as e:
+			is_success = False
+			logger.error( e )
+			return is_success, str( e ), None
 
 	def withdraw(self, access_token, account_num, amount):
 		return BankAPI.withdraw( access_token, account_num, amount)

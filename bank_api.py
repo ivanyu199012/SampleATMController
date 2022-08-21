@@ -28,24 +28,24 @@ class BankAPI:
 
 
 	@classmethod
-	def get_account_balance( self, access_token, account_num ):
-		is_success = True
-		try:
-			card_number = CustomCrypto.decrypt( access_token )
-			with open('db/db.json', 'r') as db_json_file:
-				db_dict = json.load( db_json_file )
-				if card_number in db_dict:
-					account_list = db_dict[ card_number ][ 'accounts' ]
-					account_balance = -1
-					for account in account_list:
-						if account[ 'account_num' ] == account_num:
-							account_balance = account[ 'balance' ]
-							break
-					return is_success, account_balance
-		except Exception as e:
-			is_success = False
-			logger.error( e )
-			return is_success, None
+	def get_account_balance( self, card_number, account_num ):
+		with open('db/db.json', 'r') as db_json_file:
+			db_dict = json.load( db_json_file )
+			if not card_number in db_dict:
+				return False, "card number not found", None
+
+			account_list = db_dict[ card_number ][ 'accounts' ]
+			account_balance = -1
+			for account in account_list:
+				if account[ 'account_num' ] == account_num:
+					account_balance = account[ 'balance' ]
+					break
+
+			if account_balance == -1:
+				return False, "account number not found", None
+
+			return True, None, account_balance
+
 
 	@classmethod
 	def withdraw( self, access_token, account_num, amout ):

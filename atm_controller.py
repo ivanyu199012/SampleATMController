@@ -9,29 +9,28 @@ logger = CustomLogger.get_logger_by()
 
 class ATMController:
 
-	card_info_dict = None
-
-	def is_read_card_success(self, encryted_card_info):
+	def read_card_info(self, encryted_card_info):
 		""" Check whether the card info is valid or not
 			and store the card info in cache if valid
 
 		Args:
-			encryted_card_info (str): encryted_card_info
+			encryted_card_info (str): encryted_card_info, for simplicity, we only used json string here
 
 		Returns:
 			boolean: is_success
+			str: error message
+			dict: card_info_dict, None if the method failed
 		"""
 		try:
 			_card_info_dict = json.loads( encryted_card_info )
 			if self.__is_valid_card_info( _card_info_dict ):
-				self.card_info_dict = _card_info_dict
-				return True
-			return False
+				return True, None, _card_info_dict
+			return False, 'invalid card information', None
 		except Exception as e:
 			logger.error( e )
-			return False
+			return False, str( e ), None
 
-	def authenticate(self, pin):
+	def authenticate(self, card_number, pin):
 		"""authenticate the card and return the access_token if authenticated
 
 		Args:
@@ -43,7 +42,7 @@ class ATMController:
 			str: access_token, None if the method failed
 		"""
 		try:
-			is_success, err_msg, card_number = BankAPI.authenticate( self.card_info_dict[ 'card_number' ], pin )
+			is_success, err_msg, card_number = BankAPI.authenticate( card_number, pin )
 			access_token = CustomCrypto.encrpyt( card_number ) if is_success else None
 			return is_success, err_msg, access_token
 		except Exception as e:

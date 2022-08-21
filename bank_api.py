@@ -36,7 +36,7 @@ class BankAPI:
 				db_dict = json.load( db_json_file )
 				if card_number in db_dict:
 					account_list = db_dict[ card_number ][ 'accounts' ]
-					account_balance = 0
+					account_balance = -1
 					for account in account_list:
 						if account[ 'account_num' ] == account_num:
 							account_balance = account[ 'balance' ]

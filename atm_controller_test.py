@@ -47,7 +47,7 @@ class TestATMController(unittest.TestCase):
 		self.assertEqual( is_success, False, 'card read should not be read success in this case' )
 		self.assertEqual( err_msg, "invalid card information", 'err_msg is not correct' )
 
-	def test_authenticate( self ):
+	def test_success_authenticate( self ):
 		""" expect to success """
 		card_number = "4024007180059403"
 		pin = "1234"
@@ -57,7 +57,7 @@ class TestATMController(unittest.TestCase):
 		self.assertEqual( is_authenticated, True, 'pin is incorrect or no this card information' )
 		self.assertEqual( access_token is not None, True, 'no access token return' )
 
-	def test_authenticate_wrong_pin( self ):
+	def test_failed_wrong_pin_authenticate( self ):
 		""" expect to failed because of wrong pin """
 		card_number = "4024007180059403"
 		wrong_pin = "1245"
@@ -68,7 +68,18 @@ class TestATMController(unittest.TestCase):
 		self.assertEqual( err_msg, "card_number or pin incorrect", 'err_msg is incorrect' )
 		self.assertEqual( access_token is None, True, 'access token should not exist' )
 
-	def test_get_account_list( self ):
+	def test_failed_wrong_card_num_authenticate( self ):
+		""" expect to failed because of wrong pin """
+		wrong_card_number = "40240071800594aaa03"
+		wrong_pin = "1245"
+
+		is_authenticated, err_msg, access_token = self.atm_controller.authenticate( wrong_card_number, wrong_pin )
+
+		self.assertEqual( is_authenticated, False, 'card numnber should not be correct' )
+		self.assertEqual( err_msg, "card_number or pin incorrect", 'err_msg is incorrect' )
+		self.assertEqual( access_token is None, True, 'access token should not exist' )
+
+	def test_success_get_account_list( self ):
 		""" expect to success to get account list """
 		card_number = "4024007180059403"
 		pin = "1234"

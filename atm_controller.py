@@ -46,9 +46,8 @@ class ATMController:
 			access_token = CustomCrypto.encrpyt( card_number ) if is_success else None
 			return is_success, err_msg, access_token
 		except Exception as e:
-			is_success = False
 			logger.error( e )
-			return is_success, str(e), None
+			return False, str(e), None
 
 	def get_account_list( self, access_token ):
 		"""get account list by access token
@@ -69,16 +68,43 @@ class ATMController:
 			return False, str(e), None
 
 	def get_balance(self, access_token, account_num):
+		"""get account balance
+
+		Args:
+			access_token (str):
+			account_num (str):
+
+		Returns:
+			boolean: is_success
+			str: error message
+			int: balance, None if the method failed
+		"""
 		try:
 			card_number = CustomCrypto.decrypt( access_token )
 			return BankAPI.get_account_balance( card_number, account_num )
 		except Exception as e:
-			is_success = False
 			logger.error( e )
-			return is_success, str( e ), None
+			return False, str( e ), None
 
 	def withdraw(self, access_token, account_num, amount):
-		return BankAPI.withdraw( access_token, account_num, amount)
+		"""withdraw the amount from the account
+
+		Args:
+			access_token (str):
+			account_num (str):
+			amount (int):
+
+		Returns:
+			boolean: is_success
+			str: error message
+			int: new_balance after withdraw, None if the method failed
+		"""
+		try:
+			card_number = CustomCrypto.decrypt( access_token )
+			return BankAPI.withdraw( card_number, account_num, amount)
+		except Exception as e:
+			logger.error( e )
+			return False, str( e ), None
 
 	def deposit(self, access_token, account_num, amount):
 		return BankAPI.deposit( access_token, account_num, amount)

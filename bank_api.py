@@ -48,37 +48,34 @@ class BankAPI:
 
 
 	@classmethod
-	def withdraw( self, access_token, account_num, amout ):
-		is_success = True
-		new_balance = -1
-		try:
-			card_number = CustomCrypto.decrypt( access_token )
-			with open('db/db.json', 'r+') as db_json_file:
-				db_dict = json.load( db_json_file )
-				if card_number in db_dict:
-					account_list = db_dict[ card_number ][ 'accounts' ]
-					account_index = -1
-					for i in range( len( account_list ) ):
-						if account_list[ i ][ 'account_num' ] == account_num:
-							account_index = i
-							break
+	def withdraw( self, card_number, account_num, amout ):
+		with open('db/db.json', 'r+') as db_json_file:
+			db_dict = json.load( db_json_file )
+			if not card_number in db_dict:
+				return False, "card number not found", None
 
-					if account_list[ i ][ 'balance' ] < amout:
-						logger.warning( f'Account {account_num} has insufficient balance' )
-						return False, None
+			account_list = db_dict[ card_number ][ 'accounts' ]
+			account_index = -1
+			for i in range( len( account_list ) ):
+				if account_list[ i ][ 'account_num' ] == account_num:
+					account_index = i
+					break
 
-					new_balance = db_dict[ card_number ][ 'accounts' ][ account_index ][ 'balance' ] - amout
-					db_dict[ card_number ][ 'accounts' ][ account_index ][ 'balance' ] = new_balance
+			if account_index == -1:
+				return False, "account number not found", None
 
-					db_json_file.seek( 0 )
-					json.dump( db_dict, db_json_file, indent=4, sort_keys=True )
-					db_json_file.truncate()
+			if account_list[ i ][ 'balance' ] < amout:
+				return False, f'Account {account_num} has insufficient balance', None
 
-			return is_success, new_balance
-		except Exception as e:
-			is_success = False
-			logger.error( e )
-			return is_success, None
+			new_balance = db_dict[ card_number ][ 'accounts' ][ account_index ][ 'balance' ] - amout
+			db_dict[ card_number ][ 'accounts' ][ account_index ][ 'balance' ] = new_balance
+
+			db_json_file.seek( 0 )
+			json.dump( db_dict, db_json_file, indent=4, sort_keys=True )
+			db_json_file.truncate()
+
+			return True, None, new_balance
+
 
 
 	@classmethod

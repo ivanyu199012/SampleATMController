@@ -117,8 +117,7 @@ class TestATMController(unittest.TestCase):
 		self.assertEqual( is_success, False, 'get_account_balance method failed' )
 		self.assertEqual( err_msg, "account number not found", 'err_msg is not correct' )
 
-	@unittest.skip("skip")
-	def test_withdraw( self ):
+	def test_success_withdraw( self ):
 		""" expect to withdraw success """
 		card_number = "4024007180059403"
 		pin = "1234"
@@ -128,12 +127,31 @@ class TestATMController(unittest.TestCase):
 		is_authenticated, _, access_token = self.atm_controller.authenticate( card_number, pin )
 		self.assertEqual( is_authenticated, True, 'pin is incorrect or no this card information' )
 
-		is_success, account_balance = self.atm_controller.get_balance( access_token, account_num )
+		is_success, _, account_balance = self.atm_controller.get_balance( access_token, account_num )
 		self.assertEqual( is_success, True, 'get_account_balance method failed' )
+		self.assertEqual( account_balance >= 0, True, 'account balance is not correct' )
 
-		is_success, new_account_balance = self.atm_controller.withdraw( access_token, account_num, amount )
+		is_success, _, new_account_balance = self.atm_controller.withdraw( access_token, account_num, amount )
 		self.assertEqual( is_success, True, 'withdraw method failed' )
 		self.assertEqual( new_account_balance, account_balance - amount, 'account balance is not correct' )
+
+	def test_failed_insufficient_amount_withdraw( self ):
+		""" expect to withdraw success """
+		card_number = "4024007180059403"
+		pin = "1234"
+		account_num = "73282088"
+		amount = 1E10
+
+		is_authenticated, _, access_token = self.atm_controller.authenticate( card_number, pin )
+		self.assertEqual( is_authenticated, True, 'pin is incorrect or no this card information' )
+
+		is_success, _, account_balance = self.atm_controller.get_balance( access_token, account_num )
+		self.assertEqual( is_success, True, 'get_account_balance method failed' )
+		self.assertEqual( account_balance >= 0, True, 'account balance is not correct' )
+
+		is_success, err_msg, _ = self.atm_controller.withdraw( access_token, account_num, amount )
+		self.assertEqual( is_success, False, 'withdraw should not success' )
+		self.assertEqual( err_msg, f'Account {account_num} has insufficient balance', 'err_msg is not correct' )
 
 	@unittest.skip("skip")
 	def test_deposit( self ):

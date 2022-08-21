@@ -11,7 +11,7 @@ Please first install the following prerequisites in the computer:
 ### 1.2.1. Install Python 3.9.10
 - Download the python installer "Windows installer (64-bit)" in [link](https://www.python.org/downloads/release/python-3910/)
 - Install python by following the instructions in the installer
-- After install python, add the following path to environment variables "Path":
+- After install python, add the following paths to environment variable "Path":
   - `%USERPROFILE%\AppData\Local\Programs\Python\Python39`
   - `%USERPROFILE%\AppData\Local\Programs\Python\Python39\Scripts`
 

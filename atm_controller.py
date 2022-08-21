@@ -107,7 +107,24 @@ class ATMController:
 			return False, str( e ), None
 
 	def deposit(self, access_token, account_num, amount):
-		return BankAPI.deposit( access_token, account_num, amount)
+		"""deposit the amount from the account
+
+		Args:
+			access_token (str):
+			account_num (str):
+			amount (int):
+
+		Returns:
+			boolean: is_success
+			str: error message
+			int: new_balance after deposit, None if the method failed
+		"""
+		try:
+			card_number = CustomCrypto.decrypt( access_token )
+			return BankAPI.deposit( card_number, account_num, amount)
+		except Exception as e:
+			logger.error( e )
+			return False, str( e ), None
 
 	def __is_valid_card_info( self, _card_info_dict ):
 		if 'card_number' not in _card_info_dict:
